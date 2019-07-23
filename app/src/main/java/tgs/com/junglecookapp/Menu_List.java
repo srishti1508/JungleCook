@@ -63,9 +63,9 @@ public class Menu_List extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(Menu_List.this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-     /*   progressBar = findViewById(R.id.progress);
+        progressBar = findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
-        progressBar.setIndeterminateDrawable(doubleBounce);*/
+        progressBar.setIndeterminateDrawable(doubleBounce);
         getServiceResponseData();
 
        /* rightimage.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class Menu_List extends AppCompatActivity {
         call.enqueue(new Callback<MenuModel>() {
             @Override
             public void onResponse(Call<MenuModel> call, Response<MenuModel> response) {
-               // progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 final MenuModel status = response.body();
                 if (status.getStatus().equals("1")) {

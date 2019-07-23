@@ -123,10 +123,10 @@
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-smallcaps"
                         android:gravity="left"
-                      android:textStyle="bold"
                         android:text=" - "
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#343434"
+                        android:textStyle="bold"
                         android:typeface="sans"
 
                         />

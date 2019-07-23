@@ -65,7 +65,7 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupDeawer();
-       // setupSlider();
+        setupSlider();
         albumList = new ArrayList<>();
         adapter = new AlbumAdapter(this, albumList);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -104,7 +104,7 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
         referals = settings.getString("referals", referal);
 
         if(settings.getString("user_group_name", "").toString().equals("admin")){
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
             recyclerView.setLayoutManager(mLayoutManager);
             JazzyRecyclerViewScrollListener jazzyScrollListener = new JazzyRecyclerViewScrollListener();
             recyclerView.setOnScrollListener(jazzyScrollListener);
@@ -119,7 +119,7 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
                 R.drawable.expense_report,
                 R.drawable.report,
                 R.drawable.rest_customer,
-                R.drawable.tablechair,
+                R.drawable.dintable,
                 R.drawable.product_report,
                 R.drawable.menu,
                 R.drawable.restaurant,
@@ -167,18 +167,19 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
         return true;
     }
     private void setupSlider() {
-      //  mDemoSlider = (SliderLayout) findViewById(R.id.slider);
-       /* HashMap<String,String> url_maps = new HashMap<String, String>();
+        mDemoSlider = (SliderLayout) findViewById(R.id.slider);
+      /*  HashMap<String,String> url_maps = new HashMap<String, String>();
         url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
         url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");
         url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
-*/
+        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");*/
         HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("Hannibal", R.drawable.slide1);
         file_maps.put("Big Bang Theory", R.drawable.slide2);
-        file_maps.put("House of Cards", R.drawable.slide3);
-        file_maps.put("Game of Thrones", R.drawable.slide4);
+        file_maps.put("House of Cards", R.drawable.fooditem);
+        file_maps.put("Game of Thrones1", R.drawable.slide4);
+        file_maps.put("Game of Thrones", R.drawable.fooditem1);
+
         //file_maps.put("Big Bang ", R.drawable.banner);
         for (String name : file_maps.keySet()) {
             TextSliderViews textSliderView = new TextSliderViews(this);

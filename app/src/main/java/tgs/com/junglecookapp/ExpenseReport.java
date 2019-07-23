@@ -1,5 +1,7 @@
 package tgs.com.junglecookapp;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,16 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,7 +41,8 @@ public class ExpenseReport extends Fragment {
     ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
-    TextView name, activityName,nodata,dateshow;
+    EditText fromdate;
+    TextView name, activityName,nodata,dateshow,search;
     String date="";
     TableAdapter tableAdapter;
     Dialog dialog;
@@ -44,16 +50,43 @@ public class ExpenseReport extends Fragment {
     private List<TableModel> albumList;
     public static  String SelectedMonth;
     int currnet_year, decrease, increase;
+    int mYear, mMonth, mDay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_expense, container, false);
+        View view = inflater.inflate(R.layout.activity_sale_report3, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         recyclerView=view.findViewById(R.id.recycler_view);
-        rightimage=view.findViewById(R.id.rightimage);
+        //rightimage=view.findViewById(R.id.rightimage);
         activityName=view.findViewById(R.id.activityName);
         nodata=view.findViewById(R.id.nodata);
+        search=view.findViewById(R.id.search);
+
+        fromdate=view.findViewById(R.id.fromdate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+        fromdate.setText(currentDateandTime);
+        fromdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(selectedyear, selectedmonth, selectedday);
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        fromdate.setText(sdf.format(newDate.getTime()));
+                    }
+                }, mYear, mMonth, mDay);
+                mDatePicker.getDatePicker().setCalendarViewShown(false);
+                mDatePicker.show();
+            }
+        });
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
@@ -72,17 +105,11 @@ public class ExpenseReport extends Fragment {
 
         //setHasOptionsMenu(true);
         getServiceResponseData(date);
-        rightimage.setOnClickListener(new View.OnClickListener() {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ExpenseDateReport fragment = new ExpenseDateReport();
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.setCustomAnimations(R.animator.fade_in,
-                        R.animator.fade_out);
-                ft.replace(R.id.frag_container, fragment);
-                ft.commit();
+                recyclerView.setVisibility(View.GONE);
+                getServiceResponseData(fromdate.getText().toString());
             }
         });
         return view;
@@ -97,6 +124,7 @@ public class ExpenseReport extends Fragment {
             public void onResponse(Call<ExpenseModel> call, Response<ExpenseModel> response) {
             progressBar.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+
                 final ExpenseModel status = response.body();
                 if (status.getResponse().size()>0) {
                     if(status.getTotal_expense().equals("")){
@@ -106,7 +134,7 @@ public class ExpenseReport extends Fragment {
                     }
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
-
+                    nodata.setVisibility(View.GONE);
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     nodata.setVisibility(View.VISIBLE);
@@ -132,7 +160,7 @@ public class ExpenseReport extends Fragment {
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.expense_single, parent, false);
+                    .inflate(R.layout.expense_single_copy, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 
@@ -141,7 +169,7 @@ public class ExpenseReport extends Fragment {
             final ExpenseModel.Response table = albumList.get(position);
 
             holder.expense.setText(table.getExpense_on());
-            holder.category.setText(table.getExp_category());
+            //holder.category.setText(table.getExp_category());
             holder.reason.setText(table.getExpense_note());
             holder.Amount.setText(table.getAmount());
             holder.date.setText(table.getExp_date());
@@ -173,7 +201,7 @@ public class ExpenseReport extends Fragment {
                 super(itemView);
 
                 expense=itemView.findViewById(R.id.expense);
-                category=itemView.findViewById(R.id.category);
+               // category=itemView.findViewById(R.id.category);
                 Amount=itemView.findViewById(R.id.Amount);
                 date=itemView.findViewById(R.id.date);
                 reason=itemView.findViewById(R.id.reason);

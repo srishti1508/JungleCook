@@ -116,7 +116,7 @@ public class ProductSearchedReport extends Fragment {
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.product_single, parent, false);
+                    .inflate(R.layout.product_single_copy, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 
@@ -129,7 +129,6 @@ public class ProductSearchedReport extends Fragment {
             holder.Quantity.setText(table.getPro_quantity());
             holder.Rate.setText(table.getPro_price());
             holder.Cost.setText(table.getPro_total());
-
 
         }
 

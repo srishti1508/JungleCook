@@ -59,7 +59,7 @@ public class ProfitReport extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         JazzyRecyclerViewScrollListener jazzyScrollListener = new JazzyRecyclerViewScrollListener();
         recyclerView.setOnScrollListener(jazzyScrollListener);
-        jazzyScrollListener.setTransitionEffect(11);
+        jazzyScrollListener.setTransitionEffect(1);
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
@@ -138,7 +138,7 @@ public class ProfitReport extends Fragment {
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.profit_single, parent, false);
+                    .inflate(R.layout.profit_copy, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 
@@ -153,9 +153,9 @@ public class ProfitReport extends Fragment {
             holder.status.setText(table.getStatus());
 
             if(table.getStatus().equals("Loss")){
-                holder.status.setTextColor(Color.RED);
+                holder.image.setImageResource(R.drawable.lossimage2);
             }else{
-                holder.status.setTextColor(Color.BLUE);
+                holder.image.setImageResource(R.drawable.profitsimage2);
             }
 
 
@@ -170,6 +170,7 @@ public class ProfitReport extends Fragment {
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
             TextView date,sale,expense,amount,status;
+            ImageView image;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -179,6 +180,7 @@ public class ProfitReport extends Fragment {
                 expense=itemView.findViewById(R.id.expense);
                 amount=itemView.findViewById(R.id.amount);
                 status=itemView.findViewById(R.id.status);
+                image=itemView.findViewById(R.id.image);
 
             }
         }

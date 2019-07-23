@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:diagonal="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/banner"
+
     >
+
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -16,6 +18,7 @@
 
     </android.support.v7.widget.Toolbar>
 
+
     <com.github.ybq.android.spinkit.SpinKitView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/progress"
@@ -25,7 +28,7 @@
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:SpinKit_Color="@color/red"
+        app:SpinKit_Color="@color/colorPrimaryDark"
         android:layout_marginTop="180dp"
 
         />

@@ -75,7 +75,7 @@
                         android:text="Category :"
                         android:textStyle="bold"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#05e190"
+                        android:textColor="#52a375"
                        android:textSize="15dp"
                         android:typeface="sans" />
 
@@ -91,7 +91,7 @@
                         android:textStyle="bold"
                         android:textSize="15dp"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="#05e190"
+                        android:textColor="#52a375"
                         android:typeface="sans"
 
                         />

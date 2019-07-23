@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,46 +35,50 @@ public class ProductReport extends Fragment {
     RecyclerView recyclerView;
     ImageView rightimage;
     ProgressBar progressBar;
-    TextView name;
+    TextView name,search;
+    EditText searchproduct;
     TableAdapter tableAdapter;
+    String searched="";
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_product, container, false);
+        View view = inflater.inflate(R.layout.activity_product_report3, container, false);
 
         recyclerView=view.findViewById(R.id.recycler_view);
-        rightimage=view.findViewById(R.id.rightimage);
+        search=view.findViewById(R.id.search);
+        searchproduct=view.findViewById(R.id.searchproduct);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         JazzyRecyclerViewScrollListener jazzyScrollListener = new JazzyRecyclerViewScrollListener();
         recyclerView.setOnScrollListener(jazzyScrollListener);
-        jazzyScrollListener.setTransitionEffect(11);
+        jazzyScrollListener.setTransitionEffect(1);
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
-        getServiceResponseData();
+        getServiceResponseData(searched);
 
-        rightimage.setOnClickListener(new View.OnClickListener() {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProductSearchingReport fragment = new ProductSearchingReport();
+                getServiceResponseData(searchproduct.getText().toString());
+               /* ProductSearchingReport fragment = new ProductSearchingReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.setCustomAnimations(R.animator.fade_in,
                         R.animator.fade_out);
                 ft.replace(R.id.frag_container, fragment);
-                ft.commit();
+                ft.commit();*/
             }
         });
         return view;
     }
 
-    private void getServiceResponseData() {
+    private void getServiceResponseData(String Search) {
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
-        Call<ProductModel> call = api.productwise_report("5199","");
+        Call<ProductModel> call = api.productwise_report("5199",Search);
         call.enqueue(new Callback<ProductModel>() {
             @Override
             public void onResponse(Call<ProductModel> call, Response<ProductModel> response) {

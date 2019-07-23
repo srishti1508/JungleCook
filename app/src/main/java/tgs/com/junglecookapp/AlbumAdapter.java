@@ -29,7 +29,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.single, parent, false);
+                .inflate(R.layout.single111, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -78,7 +78,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
             thumbnail = (ImageView) view.findViewById(R.id.icon);
           layoutbg = (CardView) view.findViewById(R.id.layout);
          // relative = (RelativeLayout) view.findViewById(R.id.relative);
-            view.setOnClickListener(new View.OnClickListener() {
+            thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     callActivity(mContext, getAdapterPosition());

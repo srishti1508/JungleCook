@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
-        getWindow().setBackgroundDrawableResource(R.drawable.image);
+        getWindow().setBackgroundDrawableResource(R.drawable.banner);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.getString("logged", "").toString().equals("logged")) {

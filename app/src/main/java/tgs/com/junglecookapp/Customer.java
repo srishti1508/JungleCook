@@ -12,18 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import tgs.com.junglecookapp.retrofit.ApiClient;
 import tgs.com.junglecookapp.retrofit.InterfaceApi;
-
 
 public class Customer extends Fragment {
     RecyclerView recyclerView;
@@ -84,7 +80,7 @@ public class Customer extends Fragment {
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.customer_single, parent, false);
+                    .inflate(R.layout.customer_single111, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 

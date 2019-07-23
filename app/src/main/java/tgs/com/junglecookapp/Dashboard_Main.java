@@ -22,6 +22,8 @@ public class Dashboard_Main extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
             // fragmentToReplace = new StuSelectCourseFrag();
+            transaction.setCustomAnimations(R.animator.fade_in,
+                    R.animator.fade_out);
             fragmentToReplace = fragment;
 
             transaction.replace(R.id.frag_container, fragmentToReplace, TAG);
