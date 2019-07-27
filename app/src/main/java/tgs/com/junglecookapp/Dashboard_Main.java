@@ -1,6 +1,8 @@
 package tgs.com.junglecookapp;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +19,7 @@ public class Dashboard_Main extends AppCompatActivity {
         position = getIntent().getIntExtra("position",0);
         Fragment fragment = getFragmentName(position);
         if (savedInstanceState == null) {
-
+            vibrate();
             Fragment fragmentToReplace = null;
             FragmentManager fragmentManager = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -29,6 +31,12 @@ public class Dashboard_Main extends AppCompatActivity {
             transaction.replace(R.id.frag_container, fragmentToReplace, TAG);
             transaction.commit();
         }
+    }
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) Dashboard_Main.this.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100); // 5000 miliseconds = 5 seconds
+
     }
     private Fragment getFragmentName(int position) {
         switch (position){

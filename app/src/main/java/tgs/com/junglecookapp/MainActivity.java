@@ -1,10 +1,12 @@
 package tgs.com.junglecookapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -75,15 +77,7 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*toolbar.setVisibility(View.GONE);
-                MenuList fragment = new MenuList();
-                FragmentManager fm = MainActivity.this.getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.setCustomAnimations(R.animator.fade_in,
-                        R.animator.fade_out);
-                ft.replace(R.id.frag_container, fragment);
-                ft.commit();*/
-
+                vibrate();
                 Intent intent=new Intent(MainActivity.this,Menu_List.class);
                 startActivity(intent);
             }
@@ -162,10 +156,39 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
             finish();
+        }else if(id == R.id.profits){
+
+            Intent intent = new Intent(MainActivity.this, Dashboard_Main.class);
+            intent.putExtra("position", 0);
+            startActivity(intent);
+
+        }else if(id == R.id.Expense){
+
+            Intent intent = new Intent(MainActivity.this, Dashboard_Main.class);
+            intent.putExtra("position", 1);
+            startActivity(intent);
+
+        }else if(id == R.id.Sale){
+
+            Intent intent = new Intent(MainActivity.this, Dashboard_Main.class);
+            intent.putExtra("position", 2);
+            startActivity(intent);
+
+        }else if(id == R.id.Menu){
+
+            Intent intent = new Intent(MainActivity.this, Menu_List.class);
+            startActivity(intent);
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100); // 5000 miliseconds = 5 seconds
+
+    }
+
     private void setupSlider() {
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
       /*  HashMap<String,String> url_maps = new HashMap<String, String>();
@@ -179,6 +202,7 @@ public  class MainActivity extends AppCompatActivity implements NavigationView.O
         file_maps.put("House of Cards", R.drawable.fooditem);
         file_maps.put("Game of Thrones1", R.drawable.slide4);
         file_maps.put("Game of Thrones", R.drawable.fooditem1);
+        file_maps.put("Game of Thrones2", R.drawable.wallpaper);
 
         //file_maps.put("Big Bang ", R.drawable.banner);
         for (String name : file_maps.keySet()) {

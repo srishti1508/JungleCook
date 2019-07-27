@@ -3,6 +3,7 @@ package tgs.com.junglecookapp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -49,6 +51,9 @@ public class ProductReport extends Fragment {
         recyclerView=view.findViewById(R.id.recycler_view);
         search=view.findViewById(R.id.search);
         searchproduct=view.findViewById(R.id.searchproduct);
+       /* InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(searchproduct.getWindowToken(), 0);
+        mgr.showSoftInput(searchproduct, InputMethodManager.SHOW_IMPLICIT);*/
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -63,6 +68,7 @@ public class ProductReport extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrate();
                 getServiceResponseData(searchproduct.getText().toString());
                /* ProductSearchingReport fragment = new ProductSearchingReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -76,6 +82,12 @@ public class ProductReport extends Fragment {
         return view;
     }
 
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100); // 5000 miliseconds = 5 seconds
+
+    }
     private void getServiceResponseData(String Search) {
         InterfaceApi api = ApiClient.getClient().create(InterfaceApi.class);
         Call<ProductModel> call = api.productwise_report("5199",Search);

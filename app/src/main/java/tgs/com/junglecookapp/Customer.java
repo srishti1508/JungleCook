@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
+import com.twotoasters.jazzylistview.recyclerview.JazzyRecyclerViewScrollListener;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +39,9 @@ public class Customer extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
+        JazzyRecyclerViewScrollListener jazzyScrollListener = new JazzyRecyclerViewScrollListener();
+        recyclerView.setOnScrollListener(jazzyScrollListener);
+        jazzyScrollListener.setTransitionEffect(1);
         progressBar = view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);

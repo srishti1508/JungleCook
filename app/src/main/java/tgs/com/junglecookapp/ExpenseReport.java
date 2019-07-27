@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
-
+import com.twotoasters.jazzylistview.recyclerview.JazzyRecyclerViewScrollListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,7 +35,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import tgs.com.junglecookapp.retrofit.ApiClient;
 import tgs.com.junglecookapp.retrofit.InterfaceApi;
-
 
 public class ExpenseReport extends Fragment {
     RecyclerView recyclerView;
@@ -64,7 +64,7 @@ public class ExpenseReport extends Fragment {
         search=view.findViewById(R.id.search);
 
         fromdate=view.findViewById(R.id.fromdate);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String currentDateandTime = sdf.format(new Date());
         fromdate.setText(currentDateandTime);
         fromdate.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +79,7 @@ public class ExpenseReport extends Fragment {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         Calendar newDate = Calendar.getInstance();
                         newDate.set(selectedyear, selectedmonth, selectedday);
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                         fromdate.setText(sdf.format(newDate.getTime()));
                     }
                 }, mYear, mMonth, mDay);
@@ -91,6 +91,9 @@ public class ExpenseReport extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
+        JazzyRecyclerViewScrollListener jazzyScrollListener = new JazzyRecyclerViewScrollListener();
+        recyclerView.setOnScrollListener(jazzyScrollListener);
+        jazzyScrollListener.setTransitionEffect(1);
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
@@ -102,12 +105,12 @@ public class ExpenseReport extends Fragment {
                 Toast.makeText(getActivity(), "Thanks", Toast.LENGTH_SHORT).show();
             }
         });*/
-
         //setHasOptionsMenu(true);
         getServiceResponseData(date);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrate();
                 recyclerView.setVisibility(View.GONE);
                 getServiceResponseData(fromdate.getText().toString());
             }
@@ -149,6 +152,12 @@ public class ExpenseReport extends Fragment {
             }
         });
     }
+    private void vibrate() {
+        Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100); // 5000 miliseconds = 5 seconds
+
+    }
+
 
     private class TableAdapter extends RecyclerView.Adapter<TableAdapter.MyViewHolder>  {
         private Context mContext;
@@ -173,7 +182,8 @@ public class ExpenseReport extends Fragment {
             holder.reason.setText(table.getExpense_note());
             holder.Amount.setText(table.getAmount());
             holder.date.setText(table.getExp_date());
-            holder.attachment.setOnClickListener(new View.OnClickListener() {
+
+            /*holder.attachment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -186,7 +196,8 @@ public class ExpenseReport extends Fragment {
                     ft.replace(R.id.frag_container, fragment);
                     ft.commit();
                 }
-            });
+            });*/
+
         }
 
         @Override

@@ -1,8 +1,11 @@
 package tgs.com.junglecookapp;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,8 +26,10 @@ import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Wave;
+import com.twotoasters.jazzylistview.recyclerview.JazzyRecyclerViewScrollListener;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -38,52 +45,86 @@ public class SaleReport extends Fragment {
     ProgressBar progressBar;
     Button manageprofile, fee_structure, change_pwd;
     ImageView rightimage;
-    TextView name, activityName,nodata,dateshow;
+    TextView name, activityName,nodata,dateshow,search;
     String date="";
     TableAdapter tableAdapter;
     Dialog dialog;
+    EditText fromdate;
     String month, SelectedYear;
     private List<TableModel> albumList;
     public static  String SelectedMonth;
     int currnet_year, decrease, increase;
+    int mYear, mMonth, mDay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_sale, container, false);
+        View view = inflater.inflate(R.layout.activity_sale_copy, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         recyclerView=view.findViewById(R.id.recycler_view);
-        rightimage=view.findViewById(R.id.rightimage);
+        fromdate=view.findViewById(R.id.fromdate);
+        search=view.findViewById(R.id.search);
         activityName=view.findViewById(R.id.activityName);
         nodata=view.findViewById(R.id.nodata);
-        dateshow=view.findViewById(R.id.dateshow);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String currentDateandTime = sdf.format(new Date());
-        dateshow.setText("Date: " +currentDateandTime);
+        fromdate.setText(currentDateandTime);
+        fromdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @SuppressLint("SetTextI18n")
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        Calendar newDate = Calendar.getInstance();
+                        newDate.set(selectedyear, selectedmonth, selectedday);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        fromdate.setText(sdf.format(newDate.getTime()));
+                    }
+                }, mYear, mMonth, mDay);
+                mDatePicker.getDatePicker().setCalendarViewShown(false);
+                mDatePicker.show();
+            }
+        });
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
+        JazzyRecyclerViewScrollListener jazzyScrollListener = new JazzyRecyclerViewScrollListener();
+        recyclerView.setOnScrollListener(jazzyScrollListener);
+        jazzyScrollListener.setTransitionEffect(1);
         progressBar = (ProgressBar)view.findViewById(R.id.progress);
         Sprite doubleBounce = new Wave();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
         //setHasOptionsMenu(true);
         getServiceResponseData(date);
-        rightimage.setOnClickListener(new View.OnClickListener() {
+
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                SaleDateReport fragment = new SaleDateReport();
+                vibrate();
+                recyclerView.setVisibility(View.GONE);
+                getServiceResponseData(fromdate.getText().toString());
+               /* SaleDateReport fragment = new SaleDateReport();
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 ft.setCustomAnimations(R.animator.fade_in,
                         R.animator.fade_out);
                 ft.replace(R.id.frag_container, fragment);
-                ft.commit();
+                ft.commit();*/
             }
         });
         return view;
+    }
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(100); // 5000 miliseconds = 5 seconds
+
     }
 
     private void getServiceResponseData(String Date) {
@@ -98,9 +139,14 @@ public class SaleReport extends Fragment {
                 final SaleModel status = response.body();
 
                 if (status.getResponse().size()>0) {
-                    activityName.setText("Total Sale: " +status.getGrand_total());
+                    if(status.getGrand_total().equals("")){
+                        activityName.setText("Total Sale : 0");
+                    }else {
+                        activityName.setText("Total Sale : " + status.getGrand_total());
+                    }
                     tableAdapter = new TableAdapter(getActivity(),status);
                     recyclerView.setAdapter(tableAdapter);
+                    nodata.setVisibility(View.GONE);
                 } else {
                     recyclerView.setVisibility(View.GONE);
                     nodata.setVisibility(View.VISIBLE);
@@ -116,6 +162,8 @@ public class SaleReport extends Fragment {
         });
     }
 
+
+
     private class TableAdapter extends RecyclerView.Adapter<TableAdapter.MyViewHolder>  {
         private Context mContext;
         private List<SaleModel.Response> albumList;
@@ -126,7 +174,7 @@ public class SaleReport extends Fragment {
         @Override
         public TableAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.sale_single, parent, false);
+                    .inflate(R.layout.sale_single_copy, parent, false);
             return new TableAdapter.MyViewHolder(itemView);
         }
 
@@ -137,9 +185,10 @@ public class SaleReport extends Fragment {
             holder.subtotal.setText(table.getSubtotal());
             holder.total.setText(table.getTotal());
             holder.paid.setText(table.getStatus());
+            holder.Date.setText(fromdate.getText().toString());
 
             if(table.getDiscount().equals("")){
-                holder.discount.setText("-");
+                holder.discount.setText("0");
             }else{
                 holder.discount.setText(table.getDiscount());
             }
@@ -151,7 +200,7 @@ public class SaleReport extends Fragment {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            TextView subtotal,discount,total,paid;
+            TextView subtotal,discount,total,paid,Date;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -160,6 +209,7 @@ public class SaleReport extends Fragment {
                 discount=itemView.findViewById(R.id.discount);
                 total=itemView.findViewById(R.id.total);
                 paid=itemView.findViewById(R.id.paid);
+                Date=itemView.findViewById(R.id.Date);
             }
         }
     }

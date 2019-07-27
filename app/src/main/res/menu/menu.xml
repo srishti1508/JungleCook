@@ -9,6 +9,28 @@
             android:id="@+id/logout"
             android:title="Log Out" />
 
+        <item
+            android:icon="@drawable/profits"
+            android:id="@+id/profits"
+            android:title="Profit Report" />
+
+        <item
+            android:icon="@drawable/expense_report"
+            android:id="@+id/Expense"
+            android:title="Expense Report" />
+
+        <item
+            android:icon="@drawable/product_report"
+            android:id="@+id/Sale"
+            android:title="Sale Report" />
+
+        <item
+            android:icon="@drawable/menu_res"
+            android:id="@+id/Menu"
+            android:title="Menu" />
+
+
+
 
 
 

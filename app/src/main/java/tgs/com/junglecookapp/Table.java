@@ -97,7 +97,7 @@ public class Table extends Fragment {
             holder.textnum.setText(table.getTbl_name());
             holder.texttime.setText(table.getTbl_time());
             if(table.getTbl_type().equals("Empty")){
-                holder.Table.setImageResource(R.drawable.dinnertable);
+                holder.Table.setImageResource(R.drawable.dintable);
             }else{
                 holder.Table.setImageResource(R.drawable.table);
             }
