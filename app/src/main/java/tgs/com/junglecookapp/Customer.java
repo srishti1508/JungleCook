@@ -118,4 +118,5 @@ public class Customer extends Fragment {
             }
         }
     }
+
 }
